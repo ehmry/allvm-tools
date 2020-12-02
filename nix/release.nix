@@ -1,4 +1,4 @@
-{ nixpkgs ? import ./fetch-nixpkgs.nix }:
+{ localSystem ? builtins.currentSystem, nixpkgs ? import ./fetch-nixpkgs.nix }:
 
 let
   # Stack of overlays for building allvm-tools
@@ -47,7 +47,7 @@ let
 
   # Import the package set using our stack of overlays,
   # pull out the allvm-tools-variant attribute set
-  pkgsFun = nixpkgsArgs: import nixpkgs ({ inherit overlays; } // nixpkgsArgs);
+  pkgsFun = nixpkgsArgs: import nixpkgs ({ inherit localSystem overlays; } // nixpkgsArgs);
   getALLVMPkgs = nixpkgsArgs: (pkgsFun nixpkgsArgs).allvm-tools-variants;
 
   # This is a lame way of generating the musl equivalent of the current system
